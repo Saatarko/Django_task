@@ -28,8 +28,12 @@ class Task(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
-        if self.status == self.COMPLETED and self.date_end is None:
-            self.date_end = timezone.now()
+        # Проверка, если объект уже существует в базе данных
+        if self.pk is not None:
+            original_task = Task.objects.get(pk=self.pk)
+            # Если статус изменился на COMPLETED и date_end не задан, установите date_end
+            if original_task.status != self.COMPLETED and self.status == self.COMPLETED and self.date_end is None:
+                self.date_end = timezone.now()
         super().save(*args, **kwargs)
 
     def __str__(self):

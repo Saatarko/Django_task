@@ -30,4 +30,5 @@ class TaskSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Task
-        fields = '__all__'
+        fields = ['name_task', 'description', 'date_start', 'date_end', 'status', 'user']
+        read_only_fields = ['date_end', 'date_start']
